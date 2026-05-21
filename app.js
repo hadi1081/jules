@@ -35,8 +35,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const streamSelection = document.getElementById('stream-selection');
 
     if (classGrid) {
-        for (let i = 1; i <= 10; i++) {
-            createClassCard(`Class ${i}`, `class_${i}`);
+        for (let i = 1; i <= 2; i++) {
+            createClassCard(`Class ${i}`, `class_1_2`);
+        }
+        createClassCard(`Class 3`, `class_3`);
+        for (let i = 4; i <= 5; i++) {
+            createClassCard(`Class ${i}`, `class_4_5`);
+        }
+        for (let i = 6; i <= 8; i++) {
+            createClassCard(`Class ${i}`, `junior_secondary`);
+        }
+        for (let i = 9; i <= 10; i++) {
+            createClassCard(`Class ${i}`, `secondary`);
         }
         createClassCard(`Intermediate (11-12)`, `intermediate`);
     }
@@ -59,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 streamSelection.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } else {
                 streamSelection.classList.add('hidden');
-                setupDashboard(displayName, 'standard');
+                setupDashboard(displayName, value);
             }
         });
 
@@ -95,30 +105,76 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const subjectsData = {
-        standard: [
+        const subjectsData = {
+        class_1_2: [
+            { id: 'ban', name: 'My Bengali Book', icon: 'fa-book' },
+            { id: 'eng', name: 'English for Today', icon: 'fa-language' },
+            { id: 'math', name: 'Primary Mathematics', icon: 'fa-calculator' }
+        ],
+        class_3: [
+            { id: 'ban', name: 'My Bengali Book', icon: 'fa-book' },
+            { id: 'eng', name: 'English for Today', icon: 'fa-language' },
+            { id: 'math', name: 'Primary Mathematics', icon: 'fa-calculator' },
+            { id: 'sci', name: 'Primary Science', icon: 'fa-microscope' }
+        ],
+        class_4_5: [
+            { id: 'ban', name: 'My Bengali Book', icon: 'fa-book' },
+            { id: 'eng', name: 'English for Today', icon: 'fa-language' },
+            { id: 'math', name: 'Primary Mathematics', icon: 'fa-calculator' },
+            { id: 'sci', name: 'Primary Science', icon: 'fa-microscope' },
+            { id: 'geo', name: 'Bangladesh and World Geography', icon: 'fa-earth-asia' },
+            { id: 'rel', name: 'Religion and Moral Education', icon: 'fa-hands-praying' }
+        ],
+        junior_secondary: [
+            { id: 'ban', name: 'Bangla', icon: 'fa-book' },
+            { id: 'eng', name: 'English', icon: 'fa-language' },
             { id: 'math', name: 'Mathematics', icon: 'fa-calculator' },
             { id: 'sci', name: 'Science', icon: 'fa-microscope' },
+            { id: 'hist_soc', name: 'History and Social Science', icon: 'fa-landmark' },
+            { id: 'dig_tech', name: 'Digital Technology', icon: 'fa-laptop-code' },
+            { id: 'life_live', name: 'Life and Livelihood', icon: 'fa-briefcase' },
+            { id: 'wellbeing', name: 'Health and Wellbeing', icon: 'fa-heart-pulse' },
+            { id: 'rel', name: 'Religious Studies', icon: 'fa-hands-praying' },
+            { id: 'art_cul', name: 'Art and Culture', icon: 'fa-palette' }
+        ],
+        secondary: [
+            { id: 'ban', name: 'Bangla', icon: 'fa-book' },
             { id: 'eng', name: 'English', icon: 'fa-language' },
-            { id: 'soc', name: 'Social Studies', icon: 'fa-globe' }
+            { id: 'math', name: 'Mathematics', icon: 'fa-calculator' },
+            { id: 'sci', name: 'Science', icon: 'fa-microscope' },
+            { id: 'hist_soc', name: 'History and Social Science', icon: 'fa-landmark' },
+            { id: 'dig_tech', name: 'Digital Technology', icon: 'fa-laptop-code' },
+            { id: 'life_live', name: 'Life and Livelihood', icon: 'fa-briefcase' },
+            { id: 'wellbeing', name: 'Health and Wellbeing', icon: 'fa-heart-pulse' },
+            { id: 'rel', name: 'Religious Studies', icon: 'fa-hands-praying' },
+            { id: 'art_cul', name: 'Art and Culture', icon: 'fa-palette' }
         ],
         science: [
+            { id: 'ban', name: 'Bangla', icon: 'fa-book' },
+            { id: 'eng', name: 'English', icon: 'fa-language' },
+            { id: 'ict', name: 'ICT', icon: 'fa-laptop-code' },
             { id: 'phy', name: 'Physics', icon: 'fa-atom' },
             { id: 'chem', name: 'Chemistry', icon: 'fa-flask' },
-            { id: 'math', name: 'Mathematics', icon: 'fa-calculator' },
-            { id: 'bio', name: 'Biology', icon: 'fa-dna' }
+            { id: 'bio', name: 'Biology', icon: 'fa-dna' },
+            { id: 'hmath', name: 'Higher Math', icon: 'fa-square-root-variable' }
         ],
         arts: [
+            { id: 'ban', name: 'Bangla', icon: 'fa-book' },
+            { id: 'eng', name: 'English', icon: 'fa-language' },
+            { id: 'ict', name: 'ICT', icon: 'fa-laptop-code' },
             { id: 'hist', name: 'History', icon: 'fa-monument' },
-            { id: 'pol', name: 'Political Science', icon: 'fa-landmark' },
             { id: 'geo', name: 'Geography', icon: 'fa-earth-americas' },
-            { id: 'eng', name: 'English Literature', icon: 'fa-book-open' }
+            { id: 'civ', name: 'Civics / Logic', icon: 'fa-landmark' },
+            { id: 'soc', name: 'Sociology / Economics', icon: 'fa-users' }
         ],
         commerce: [
-            { id: 'acc', name: 'Accountancy', icon: 'fa-file-invoice-dollar' },
-            { id: 'bus', name: 'Business Studies', icon: 'fa-briefcase' },
-            { id: 'eco', name: 'Economics', icon: 'fa-chart-pie' },
-            { id: 'math', name: 'Mathematics', icon: 'fa-calculator' }
+            { id: 'ban', name: 'Bangla', icon: 'fa-book' },
+            { id: 'eng', name: 'English', icon: 'fa-language' },
+            { id: 'ict', name: 'ICT', icon: 'fa-laptop-code' },
+            { id: 'acc', name: 'Accounting', icon: 'fa-file-invoice-dollar' },
+            { id: 'fin', name: 'Finance & Banking', icon: 'fa-piggy-bank' },
+            { id: 'bus', name: 'Business Organization', icon: 'fa-briefcase' },
+            { id: 'eco', name: 'Economics', icon: 'fa-chart-pie' }
         ]
     };
 
@@ -136,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const msgs = chatContainer.querySelectorAll('.message');
         msgs.forEach(m => m.remove());
 
-        const subjects = subjectsData[streamType] || subjectsData.standard;
+        const subjects = subjectsData[streamType] || subjectsData.class_1_2;
 
         subjects.forEach(sub => {
             const li = document.createElement('li');

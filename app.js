@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.class-card').forEach(c => c.classList.remove('selected'));
             div.classList.add('selected');
 
-            // Show stream selection if intermediate, otherwise proceed to dashboard
-            if (value === 'intermediate') {
+            // Show stream selection if intermediate or secondary, otherwise proceed to dashboard
+            if (value === 'intermediate' || value === 'secondary') {
                 streamSelection.classList.remove('hidden');
                 // Scroll down slightly to make streams visible
                 streamSelection.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -81,7 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
     streamCards.forEach(card => {
         card.addEventListener('click', () => {
             const stream = card.dataset.stream;
-            setupDashboard(`Intermediate - ${stream.charAt(0).toUpperCase() + stream.slice(1)}`, stream);
+            const activeClassCard = document.querySelector('.class-card.selected');
+            const levelPrefix = activeClassCard ? activeClassCard.textContent : 'Intermediate';
+            setupDashboard(`${levelPrefix} - ${stream.charAt(0).toUpperCase() + stream.slice(1)}`, stream);
         });
     });
 
@@ -232,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSendMsg = document.getElementById('btn-send-msg');
     const chatInput = document.getElementById('chat-input');
 
-    function handleSendMessage() {
+    async function handleSendMessage() {
         const text = chatInput.value.trim();
         if(!text) return;
 
@@ -240,10 +242,49 @@ document.addEventListener('DOMContentLoaded', () => {
         addMessage('user', text);
         chatInput.value = '';
 
-        // Simulate AI thinking and responding
-        setTimeout(() => {
-            addMessage('ai', `That's a great question about ${text}! Let's break it down together...`);
-        }, 1000);
+        // Get context from UI
+        const className = document.getElementById('dashboard-level-display').textContent;
+        const subject = document.getElementById('chat-subject-title').textContent;
+
+        // Show typing indicator or initial state
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'message ai loading';
+        loadingDiv.innerHTML = `
+            <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+            <div class="msg-bubble"><i class="fa-solid fa-circle-notch fa-spin"></i> Thinking...</div>
+        `;
+        chatContainer.appendChild(loadingDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        try {
+            const response = await fetch('/api/tutor/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: text,
+                    className: className,
+                    subject: subject,
+                    stream: className.includes('Intermediate') ? className.split('-')[1].trim() : ''
+                })
+            });
+
+            const data = await response.json();
+
+            // Remove loading
+            loadingDiv.remove();
+
+            if (data.error) {
+                addMessage('ai', `Error: ${data.error}`);
+            } else {
+                addMessage('ai', data.reply);
+            }
+        } catch (err) {
+            loadingDiv.remove();
+            addMessage('ai', 'Connection error. Please try again later.');
+            console.error('Chat error:', err);
+        }
     }
 
     if(btnSendMsg) btnSendMsg.addEventListener('click', handleSendMessage);
@@ -264,9 +305,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="msg-bubble"></div>
         `;
 
-        // Securely add text content to prevent XSS
         const msgBubble = div.querySelector('.msg-bubble');
-        msgBubble.textContent = text;
+        if (sender === 'ai' && typeof marked !== 'undefined') {
+            msgBubble.innerHTML = marked.parse(text);
+        } else {
+            msgBubble.textContent = text;
+        }
 
         chatContainer.appendChild(div);
         chatContainer.scrollTop = chatContainer.scrollHeight;

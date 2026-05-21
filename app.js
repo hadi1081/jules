@@ -4,8 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('App initialized');
 
     // View Management
-    const views = {
+        const views = {
         landing: document.getElementById('view-landing'),
+        login: document.getElementById('view-login'),
+        signup: document.getElementById('view-signup'),
         classSelection: document.getElementById('view-class-selection'),
         dashboard: document.getElementById('view-dashboard')
     };
@@ -22,11 +24,77 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize with landing page
     showView('landing');
 
+    // --- Auth Logic & State ---
+    let currentUser = null;
+
+    const linkSignup = document.getElementById('link-signup');
+    const linkLogin = document.getElementById('link-login');
+    const loginForm = document.getElementById('login-form');
+    const signupForm = document.getElementById('signup-form');
+    const btnGoogleLogin = document.getElementById('btn-google-login');
+    const btnGoogleSignup = document.getElementById('btn-google-signup');
+    const userNameDisplay = document.getElementById('user-name-display');
+    const userAvatar = document.getElementById('user-avatar');
+
+    if(linkSignup) linkSignup.addEventListener('click', () => showView('signup'));
+    if(linkLogin) linkLogin.addEventListener('click', () => showView('login'));
+
+    async function handleAuth(url, body) {
+        try {
+            const res = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            if (data.success && data.user) {
+                currentUser = data.user;
+                userNameDisplay.textContent = currentUser.name;
+                if (currentUser.picture) {
+                    userAvatar.innerHTML = `<img src="${currentUser.picture}" alt="avatar" style="width:100%;height:100%;border-radius:50%;">`;
+                } else {
+                    userAvatar.innerHTML = `<i class="fa-solid fa-user"></i>`;
+                }
+                showView('classSelection');
+            } else {
+                alert(data.error || 'Authentication failed');
+            }
+        } catch (err) {
+            console.error('Auth error', err);
+            alert('Unable to connect to server. Please ensure the backend is running.');
+        }
+    }
+
+    if(loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            handleAuth('http://localhost:5000/api/auth/local/login', { email, password });
+        });
+    }
+
+    if(signupForm) {
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            handleAuth('http://localhost:5000/api/auth/local/signup', { name, email, password });
+        });
+    }
+
+    const mockGoogleAuth = () => handleAuth('http://localhost:5000/api/auth/google', { token: 'mock_token_123' });
+    if(btnGoogleLogin) btnGoogleLogin.addEventListener('click', mockGoogleAuth);
+    if(btnGoogleSignup) btnGoogleSignup.addEventListener('click', mockGoogleAuth);
+
+
+
     // Event Listeners
     const btnStartLearning = document.getElementById('btn-start-learning');
     if(btnStartLearning) {
         btnStartLearning.addEventListener('click', () => {
-            showView('classSelection');
+            showView('login');
         });
     }
 
@@ -257,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatContainer.scrollTop = chatContainer.scrollHeight;
 
         try {
-            const response = await fetch('/api/tutor/chat', {
+            const response = await fetch('http://localhost:5000/api/tutor/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -266,7 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     message: text,
                     className: className,
                     subject: subject,
-                    stream: className.includes('Intermediate') ? className.split('-')[1].trim() : ''
+                    stream: className.includes('Intermediate') || className.includes('Class 9') || className.includes('Class 10') ? className.split('-')[1]?.trim() : '',
+                    user: currentUser
                 })
             });
 

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tutor - Learn Smarter</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+
+        <!-- View: Landing Page -->
+        <section id="view-landing" class="view">
+            <!-- Header / Nav -->
+            <header class="navbar container">
+                <div class="logo">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>AI Tutor</span>
+                </div>
+            </header>
+
+            <!-- Hero Section -->
+            <main class="hero container">
+                <div class="hero-content">
+                    <h1>Your Personal <span class="highlight">AI Tutor</span></h1>
+                    <p class="subtitle">Experience personalized learning, 24/7. Master subjects from Class 1 through Intermediate with intelligent, adaptive guidance.</p>
+                    <button id="btn-start-learning" class="btn btn-primary btn-large">
+                        Start Learning Now <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i>
+                    </button>
+                </div>
+                <div class="hero-image">
+                    <!-- Placeholder for an illustration or conceptual image -->
+                    <div class="mockup-window">
+                        <div class="mockup-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <div class="mockup-body">
+                            <div class="chat-bubble ai">Hello! Let's conquer physics today. What topic should we start with?</div>
+                            <div class="chat-bubble user">Can you explain Newton's Laws?</div>
+                            <div class="chat-bubble ai">Absolutely! Newton's First Law states...</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Features Section -->
+            <section class="features bg-white">
+                <div class="container">
+                    <h2 class="text-center section-title">Why Learn with AI Tutor?</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+                            <h3>Smart & Adaptive</h3>
+                            <p>Our AI analyzes your learning pace and adjusts lessons to ensure you truly understand the concepts.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fa-solid fa-clock"></i></div>
+                            <h3>Available 24/7</h3>
+                            <p>Got a question at 2 AM? Your tutor is always ready to help you with homework and exam prep.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+                            <h3>Comprehensive Curriculums</h3>
+                            <p>From primary basics (Class 1) to specialized Intermediate streams (Science, Arts, Commerce).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- View: Class & Stream Selection -->
+        <section id="view-class-selection" class="view">
+            <header class="navbar container">
+                <div class="logo">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>AI Tutor</span>
+                </div>
+            </header>
+            <main class="container">
+                <div class="selection-header text-center">
+                    <h2>Select Your Class</h2>
+                    <p class="subtitle">Choose your grade to get personalized subjects.</p>
+                </div>
+
+                <div class="class-grid" id="class-grid">
+                    <!-- JavaScript will populate this -->
+                </div>
+
+                <!-- Stream Selection (Hidden by default) -->
+                <div id="stream-selection" class="stream-selection hidden">
+                    <h3 class="text-center">Select Your Stream</h3>
+                    <div class="stream-grid">
+                        <div class="stream-card" data-stream="science">
+                            <div class="stream-icon" style="color: var(--science-color); background-color: #e0f2fe;"><i class="fa-solid fa-flask"></i></div>
+                            <h4>Science</h4>
+                        </div>
+                        <div class="stream-card" data-stream="arts">
+                            <div class="stream-icon" style="color: var(--arts-color); background-color: #fef3c7;"><i class="fa-solid fa-palette"></i></div>
+                            <h4>Arts</h4>
+                        </div>
+                        <div class="stream-card" data-stream="commerce">
+                            <div class="stream-icon" style="color: var(--commerce-color); background-color: #d1fae5;"><i class="fa-solid fa-chart-line"></i></div>
+                            <h4>Commerce</h4>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </section>
+
+        <!-- View: Dashboard (Sidebar + Chat) -->
+        <section id="view-dashboard" class="view dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="logo">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>AI Tutor</span>
+                    </div>
+                    <div class="current-level" id="dashboard-level-display">Class 10</div>
+                </div>
+
+                <div class="sidebar-menu">
+                    <h5 class="menu-label">Subjects</h5>
+                    <ul class="subject-list" id="subject-list">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+
+                <div class="sidebar-footer">
+                    <button id="btn-back-selection" class="btn btn-outline" style="width: 100%;"><i class="fa-solid fa-arrow-left"></i> Change Class</button>
+                </div>
+            </aside>
+
+            <!-- Main Content Area (Chat Interface) -->
+            <main class="chat-main">
+                <header class="chat-header">
+                    <div class="chat-title">
+                        <i class="fa-solid fa-book" id="chat-subject-icon"></i>
+                        <h2 id="chat-subject-title">Select a Subject</h2>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    </div>
+                </header>
+
+                <div class="chat-container" id="chat-container">
+                    <div class="empty-state" id="chat-empty-state">
+                        <div class="empty-icon"><i class="fa-solid fa-robot"></i></div>
+                        <h3>I'm ready to help you learn!</h3>
+                        <p>Select a subject from the sidebar to begin our session.</p>
+                    </div>
+                    <!-- Chat messages will be appended here by JS -->
+                </div>
+
+                <div class="chat-input-area hidden" id="chat-input-area">
+                    <div class="input-wrapper">
+                        <button class="attach-btn"><i class="fa-solid fa-paperclip"></i></button>
+                        <input type="text" id="chat-input" placeholder="Ask your tutor a question..." autocomplete="off">
+                        <button class="send-btn" id="btn-send-msg"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                    <div class="disclaimer">AI Tutor can make mistakes. Verify important information.</div>
+                </div>
+            </main>
+        </section>
+
+    </div>
+
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+</body>
+</html>
